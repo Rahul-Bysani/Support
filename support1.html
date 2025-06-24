@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communication Channels Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="bg-primary text-white p-3 mb-4">
+  <h4>Communication Channels</h4>
+  <p>Team support channel: Channel for team-related issues where we need help from the wider team (Team Support | Team-Purchasing | Microsoft Teams)</p>
+  <p>AM internal Inbox: Any request for support to action (AMinternal@oneadvanced.com)</p>
+</div>
+
+<div class="container py-5">
+  <h1 class="mb-4">Communication Channels Form</h1>
+
+  <form id="communicationForm">
+    <div class="mb-3">
+      <label for="category" class="form-label">Select Category</label>
+      <select id="category" class="form-select" onchange="showCategoryFields()" required>
+        <option value="">-- Select --</option>
+        <option value="Customer Issue/Requests">Customer Issue/Requests</option>
+        <option value="AM Internal Task Bugs or Errors">AM Internal Task Bugs or Errors</option>
+        <option value="SNOW Requests">SNOW Requests</option>
+        <option value="Complaints and Escalations">Complaints and Escalations</option>
+        <option value="Poor Rating on a Case">Poor Rating on a Case</option>
+      </select>
+    </div>
+
+    <div id="categoryFields"></div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
+</div>
+
+<script>
+  function showCategoryFields() {
+    const category = document.getElementById('category').value;
+    const container = document.getElementById('categoryFields');
+    container.innerHTML = '';
+
+    if (category === 'Customer Issue/Requests') {
+      container.innerHTML = `
+        <div class="alert alert-info mb-3">
+          <strong>Purpose:</strong> To report issues experienced by customers that are shared with internal teams and need to be forwarded to Support.<br>
+          <strong>NOTE:</strong> Before raising please refer to help documents or the confluence page.
+        </div>
+        <div class="mb-3">
+          <label for="subCategory" class="form-label">Select Type</label>
+          <select id="subCategory" class="form-select mb-3" required>
+            <option value="">-- Select --</option>
+            <option value="issue">Issue</option>
+            <option value="query">Query</option>
+            <option value="request">Request</option>
+          </select>
+        </div>
+        <input class="form-control mb-3" name="Customer Name" placeholder="Customer Name" required>
+        <input class="form-control mb-3" name="Account Name" placeholder="Account Name" required>
+        <textarea class="form-control mb-3" name="Issue Description" placeholder="Issue Description" required></textarea>
+        <input class="form-control mb-3" name="Case Reference Number" placeholder="Case Reference Number (Optional)">
+        <textarea class="form-control mb-3" name="Steps to Reproduce" placeholder="Steps to Reproduce (if available)"></textarea>
+        <input class="form-control mb-3" name="Screenshot or Error Message" placeholder="Add Screenshot or Error Message In The Email(if applicable)">
+        <select class="form-select mb-3" name="Priority Level" required>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <textarea class="form-control mb-3" name="Additional Information" placeholder="Additional Information (Optional)"></textarea>
+      `;
+    } else if (category === 'AM Internal Task Bugs or Errors') {
+      container.innerHTML = `
+        <div class="alert alert-info mb-3">
+          <strong>Purpose:</strong> To log internal issues or tasks identified by the purchasing team that require action from the Support team (reporting a bug or an error).<br>
+          <strong>Note:</strong> JIRA to be raised internally with the engineering team as support cannot create JIRA manually for internal purposes.
+        </div>
+        <textarea class="form-control mb-3" name="Issue Description" placeholder="Issue Description" required></textarea>
+        <input class="form-control mb-3" name="Login Username" placeholder="Login Username" required>
+        <textarea class="form-control mb-3" name="Summary of the Issue" placeholder="Summary of the Issue" required></textarea>
+        <input class="form-control mb-3" name="Affected Users" placeholder="Affected Users (Single/Multiple)" required>
+        <input class="form-control mb-3" name="Customer Account Name" placeholder="Customer Account Name" required>
+        <input class="form-control mb-3" name="Customer Name/Email" placeholder="Customer Name/Email" required>
+        <textarea class="form-control mb-3" name="Steps to Replicate" placeholder="Steps to Replicate" required></textarea>
+        <input class="form-control mb-3" name="Supporting Files" placeholder="Attach Supporting Files or Screenshots In The Email">
+        <select class="form-select mb-3" name="Environment" required>
+          <option value="live">Live</option>
+          <option value="test">Test</option>
+          <option value="demo">Demo</option>
+          <option value="staging">Staging</option>
+        </select>
+        <textarea class="form-control mb-3" name="Actual Result" placeholder="Actual Result" required></textarea>
+        <textarea class="form-control mb-3" name="Expected Result" placeholder="Expected Result" required></textarea>
+      `;
+    } else if (category === 'SNOW Requests') {
+      container.innerHTML = `
+        <div class="alert alert-info mb-3">
+          <strong>NOTE:</strong> If the request is about how to register in the portal or how to get the password reset email, please refer to the help documents link below. [https://cloudprocurement.helpdocs.io/category/4zd3av8ltm-the-one-advanced-customer-support-portal]<br>
+          <strong>Purpose:</strong> To raise ServiceNow (SNOW) related issues or new customer/account onboarding requests.
+        </div>
+        <div class="mb-3">
+          <label for="subCategory" class="form-label">Select Type</label>
+          <select id="subCategory" class="form-select mb-3" onchange="showSnowFields()" required>
+            <option value="">-- Select --</option>
+            <option value="general">General SNOW Issue</option>
+            <option value="newAccount">New SNOW Account Request</option>
+          </select>
+        </div>
+        <div id="snowFields"></div>
+      `;
+    } else if (category === 'Complaints and Escalations') {
+      container.innerHTML = `
+        <div class="alert alert-info mb-3">
+          <strong>Purpose:</strong> If the customer raises a complaint / Escalation, we will need the following information to be filled out.
+        </div>
+        <input class="form-control mb-3" name="Complaint Type" placeholder="Complaint Type (Implementation / Support / Content / Engineering)" required>
+        <input class="form-control mb-3" name="Complaint Reference" placeholder="Complaint/Escalation Reference (Optional)">
+        <input class="form-control mb-3" name="Customer Full Name" placeholder="Customer Full Name" required>
+        <input class="form-control mb-3" name="Customer Email Address" placeholder="Customer Email Address" required>
+        <input class="form-control mb-3" name="Account Name" placeholder="Account Name" required>
+        <input class="form-control mb-3" name="Phone Number" placeholder="Phone Number (Optional)">
+        <textarea class="form-control mb-3" name="Description of the Issue" placeholder="Description of the Issue" required></textarea>
+        <input class="form-control mb-3" name="Case Reference" placeholder="Case Reference (Mandatory)" required>
+        <input class="form-control mb-3" name="Case Owner" placeholder="Case Owner (Optional)">
+        <textarea class="form-control mb-3" name="Additional Information" placeholder="Additional Information (Optional)"></textarea>
+      `;
+    } else if (category === 'Poor Rating on a Case') {
+      container.innerHTML = `
+        <div class="alert alert-info mb-3">
+          <strong>Purpose:</strong> If the customer rates the case as below average and is not happy with the service provided by the customer support team.
+        </div>
+        <input class="form-control mb-3" name="Case Reference Number" placeholder="Case Reference Number" required>
+        <textarea class="form-control mb-3" name="Customer Comments" placeholder="Customer Response / Comments" required></textarea>
+        <input class="form-control mb-3" name="Case Owner" placeholder="Case Owner" required>
+        <textarea class="form-control mb-3" name="Additional Information" placeholder="Additional Information (Optional)"></textarea>
+      `;
+    }
+  }
+
+  function showSnowFields() {
+    const subCategory = document.getElementById('subCategory').value;
+    const container = document.getElementById('snowFields');
+    container.innerHTML = '';
+
+    if (subCategory === 'general') {
+      container.innerHTML = `
+        <input class="form-control mb-3" name="Customer Name" placeholder="Customer Name" required>
+        <input class="form-control mb-3" name="Customer Email" placeholder="Customer Email" required>
+        <input class="form-control mb-3" name="Account Name" placeholder="Account Name" required>
+        <textarea class="form-control mb-3" name="Issue Description" placeholder="Issue Description" required></textarea>
+        <input class="form-control mb-3" name="Relevant Ticket ID" placeholder="Relevant Ticket ID (Optional)">
+        <input class="form-control mb-3" name="Supporting Documentation" placeholder="Supporting Documentation or Screenshots">
+      `;
+    } else if (subCategory === 'newAccount') {
+      container.innerHTML = `
+        <input class="form-control mb-3" name="New Account Name" placeholder="New Account Name" required>
+        <input class="form-control mb-3" name="Primary Contact Name" placeholder="Primary Contact Name" required>
+        <input class="form-control mb-3" name="Primary Contact Email" placeholder="Primary Contact Email" required>
+        <input class="form-control mb-3" name="Location" placeholder="Location" required>
+        <input class="form-control mb-3" name="Website Domain Link" placeholder="Website Domain Link (if any)">
+      `;
+    }
+  }
+
+  document.getElementById('communicationForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    let body = '';
+    formData.forEach((value, key) => {
+      body += `${key}: ${value}\n`;
+    });
+
+    const category = document.getElementById('category').value;
+    const subject = category ? category : 'New Communication Form Submission';
+
+    window.location.href = `mailto:AMinternal@oneadvanced.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+</body>
+</html>
